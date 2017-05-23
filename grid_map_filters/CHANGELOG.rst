@@ -4,6 +4,11 @@ Changelog for package grid_map_filters
 
 Forthcoming
 -----------
+* Smaller cleanups for consistency.
+* Contributors: Peter Fankhauser
+
+1.4.2 (2017-01-24)
+------------------
 
 1.4.1 (2016-10-23)
 ------------------

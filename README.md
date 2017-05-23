@@ -10,7 +10,7 @@ Features:
 * **Efficient map re-positioning:** Data storage is implemented as two-dimensional circular buffer. This allows for non-destructive shifting of the map's position (e.g. to follow the robot) without copying data in memory.
 * **Based on Eigen:** Grid map data is stored as [Eigen] data types. Users can apply available Eigen algorithms directly to the map data for versatile and efficient data manipulation.
 * **Convenience functions:** Several helper methods allow for convenient and memory safe cell data access. For example, iterator functions for rectangular, circular, polygonal regions and lines are implemented.
-* **ROS interface:** Grid maps can be directly converted to and from ROS message types such as PointCloud2, OccupancyGrid, GridCells, and our custom GridMap message.
+* **ROS interface:** Grid maps can be directly converted to and from ROS message types such as PointCloud2, OccupancyGrid, GridCells, and our custom GridMap message. This package also contains compatibility with [costmap_2d](http://wiki.ros.org/costmap_2d).
 * **OpenCV interface:** Grid maps can be seamlessly converted from and to [OpenCV] image types to make use of the tools provided by [OpenCV].
 * **Visualizations:** The *grid_map_rviz_plugin* renders grid maps as 3d surface plots (height maps) in [RViz]. Additionally, the *grid_map_visualization* package helps to visualize grid maps as point clouds, occupancy grids, grid cells etc.
 
@@ -35,7 +35,7 @@ in Robot Operating System (ROS) – The Complete Reference (Volume 1), A. Koubaa
 
 
         @incollection{Fankhauser2016GridMapLibrary,
-            author = {Fankhauser, Péter and Hutter, Marco},
+            author = {Fankhauser, P{\'{e}}ter and Hutter, Marco},
             booktitle = {Robot Operating System (ROS) – The Complete Reference (Volume 1)},
             title = {{A Universal Grid Map Library: Implementation and Use Case for Rough Terrain Navigation}},
             chapter = {5},
@@ -54,6 +54,7 @@ An introduction to the grid map library including a tutorial is given in [this b
 The C++ API is documented here:
 * [grid_map_core](http://docs.ros.org/api/grid_map_core/html/index.html)
 * [grid_map_ros](http://docs.ros.org/api/grid_map_ros/html/index.html)
+* [grid_map_costmap_2d](http://docs.ros.org/api/grid_map_costmap_2d/html/index.html)
 * [grid_map_cv](http://docs.ros.org/api/grid_map_cv/html/index.html)
 * [grid_map_pcl](http://docs.ros.org/api/grid_map_pcl/html/index.html)
 
@@ -63,7 +64,7 @@ The C++ API is documented here:
 
 To install all packages from the grid map library as Debian packages use
 
-    sudo apt-get install ros-indigo-grid-map
+    sudo apt-get install ros-kinetic-grid-map
 
 ### Building from Source
 
@@ -73,9 +74,9 @@ The *grid_map_core* package depends only on the linear algebra library [Eigen].
 
     sudo apt-get install libeigen3-dev
 
-The *grid_map_cv* package depends additionally on [OpenCV] and the *grid_map_pcl* package depends additionally on [PCL].
+The other packages depend on the [ROS] standard installation (*roscpp*, *tf*, *filters*, *sensor_msgs*, *nav_msgs*, and *cv_bridge*).
 
-The other packages depend additionally on the [ROS] standard installation (*roscpp*, *tf*, *filters*, *sensor_msgs*, *nav_msgs*, and *cv_bridge*).
+The *grid_map_cv* package depends additionally on [OpenCV], *grid_map_pcl* on [PCL], *grid_map_costmap_2d* on [costmap_2d].
 
 
 #### Building
@@ -365,6 +366,7 @@ Please report bugs and request features using the [Issue Tracker](https://github
 [Eigen]: http://eigen.tuxfamily.org
 [OpenCV]: http://opencv.org/
 [PCL]: http://pointclouds.org/
+[costmap_2d]: http://wiki.ros.org/costmap_2d
 [grid_map_msgs/GridMapInfo]: http://docs.ros.org/api/grid_map_msgs/html/msg/GridMapInfo.html
 [grid_map_msgs/GridMap]: http://docs.ros.org/api/grid_map_msgs/html/msg/GridMap.html
 [grid_map_msgs/GetGridMap]: http://docs.ros.org/api/grid_map_msgs/html/srv/GetGridMap.html

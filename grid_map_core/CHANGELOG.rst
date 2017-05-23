@@ -4,8 +4,20 @@ Changelog for package grid_map_core
 
 Forthcoming
 -----------
+* Fixing buffer handling bug for circular and ellipse iterators.
+* Added Eigen macro for bit-alignment (`#88 <https://github.com/ethz-asl/grid_map/issues/88>`_).
+* Added default copy constructor and assign operator methods after the rule of five.
+* Fixing build error on ROS Kinetic.
+* Fixing return value in `getQuadrant` member function.
+* Extend grid_map_cv unit test for transparent pixels/nan-values.
+* Contributors: Peter Fankhauser, Sascha, Thomas Emter
+
+1.4.2 (2017-01-24)
+------------------
 * Added linear interpolation method for data access.
-* Contributors: Dominic Jud, Peter Fankhauser
+* Increased efficiency for linear interpolation method.
+* Addressing C++ compiler warnings.
+* Contributors: Dominic Jud, Peter Fankhauser, Horatiu George Todoran
 
 1.4.1 (2016-10-23)
 ------------------

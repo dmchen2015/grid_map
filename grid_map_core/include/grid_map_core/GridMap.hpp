@@ -39,6 +39,10 @@ class SubmapGeometry;
 class GridMap
 {
  public:
+  // Type traits for use with template methods/classes using GridMap as a template parameter.
+  typedef grid_map::DataType DataType;
+  typedef grid_map::Matrix Matrix;
+
   /*!
    * Constructor.
    * @param layers a vector of strings containing the definition/description of the data layer.
@@ -49,6 +53,14 @@ class GridMap
    * Emtpy constructor.
    */
   GridMap();
+
+  /*!
+   * Default copy assign and copy constructors.
+   */
+  GridMap(const GridMap&) = default;
+  GridMap& operator=(const GridMap&) = default;
+  GridMap(GridMap&&) = default;
+  GridMap& operator=(GridMap&&) = default;
 
   /*!
    * Destructor.
@@ -502,6 +514,9 @@ class GridMap
 
   //! Circular buffer start indeces.
   Index startIndex_;
+
+ public:
+  EIGEN_MAKE_ALIGNED_OPERATOR_NEW
 };
 
 } /* namespace */
