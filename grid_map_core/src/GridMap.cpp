@@ -680,23 +680,13 @@ bool GridMap::atPositionLinearInterpolated(const std::string& layer, const Posit
   indices[3].x() = indices[1].x();
   indices[3].y() = indices[2].y();
   
-<<<<<<< HEAD
-  
   const Size&   mapSize       = getSize();
   const size_t  bufferSize    = mapSize(0) * mapSize(1);
   const size_t  startIndexLin = getLinearIndexFromIndex( startIndex_, mapSize );
   const size_t  endIndexLin   = startIndexLin + bufferSize;
   const auto&   layerMat      = operator[](layer);
   double        f[4];
-=======
-  const Size& mapSize = getSize();
-  const size_t bufferSize = mapSize(0) * mapSize(1);
-  const size_t startIndexLin = getLinearIndexFromIndex(startIndex_, mapSize);
-  const size_t endIndexLin = startIndexLin + bufferSize;
-  const auto& layerMat = operator[](layer);
-  float         f[4];
 
->>>>>>> 7b262627200f735ca4a9c3f977e029474186ddda
   for (size_t i = 0; i < 4; ++i) {
     const size_t indexLin = getLinearIndexFromIndex(indices[idxShift[i]], mapSize);
     if ((indexLin < startIndexLin) || (indexLin > endIndexLin)) return false;
@@ -711,22 +701,14 @@ bool GridMap::atPositionLinearInterpolated(const std::string& layer, const Posit
 //   
 //   value = f[0] * positionRedFlip.x() * positionRedFlip.y() + 
 //           f[1] *     positionRed.x() * positionRedFlip.y() +
-// 	  f[2] * positionRedFlip.x() *     positionRed.y() + 
-// 	  f[3] *     positionRed.x() *     positionRed.y();
+// 	     f[2] * positionRedFlip.x() *     positionRed.y() + 
+// 	     f[3] *     positionRed.x() *     positionRed.y();
 	  
   const double a = f[1]-f[0];
   const double b = f[2]-f[0];
   const double c = f[0]+f[3]-(f[1]+f[2]);
   
   value = f[0] + positionRed.x() * a + positionRed.y() * b + positionRed.x() * positionRed.y() * c;
-  
-<<<<<<< HEAD
-=======
-  value = f[0] * positionRedFlip.x() * positionRedFlip.y() + 
-          f[1] *     positionRed.x() * positionRedFlip.y() +
-          f[2] * positionRedFlip.x() *     positionRed.y() +
-          f[3] *     positionRed.x() *     positionRed.y();
->>>>>>> 7b262627200f735ca4a9c3f977e029474186ddda
   return true;
 }
 
