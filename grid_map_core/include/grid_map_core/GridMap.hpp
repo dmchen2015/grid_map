@@ -187,6 +187,7 @@ class GridMap
    * @throw std::out_of_range if no map layer with name `layer` is present.
    */
   float& atPosition(const std::string& layer, const Position& position);
+  
 
   /*!
    * Get cell data at requested position. Const version form above.
@@ -199,6 +200,17 @@ class GridMap
   float atPosition(const std::string& layer, const Position& position,
                    InterpolationMethods interpolationMethod = InterpolationMethods::INTER_NEAREST) const;
 
+  /*!
+   * Get cell data at requested position. Const version form above.
+   * @param layer the Eigen Matrix layer object.
+   * @param position the requested position.
+   * @return the data of the cell.
+   * @throw std::out_of_range if no map layer with name `layer` is present.
+   * @throw std::runtime_error if the specified interpolation method is not implemented.
+   */
+  float atPosition(const grid_map::Matrix& layer, const Position& position,
+                   InterpolationMethods interpolationMethod = InterpolationMethods::INTER_NEAREST) const;
+		   
   /*!
    * Get cell data for requested index.
    * @param layer the name of the layer to be accessed.
@@ -470,12 +482,12 @@ class GridMap
 
   /*!
    * Get cell data at requested position, linearly interpolated from 2x2 cells.
-   * @param layer the name of the layer to be accessed.
+   * @param layer the Eigen Matrix layer object.
    * @param position the requested position.
    * @param value the data of the cell.
    * @return true if linear interpolation was successful.
    */
-  bool atPositionLinearInterpolated(const std::string& layer, const Position& position, float& value) const;
+  bool atPositionLinearInterpolated(const grid_map::Matrix& layer, const Position& position, float& value) const;
 
   /*!
    * Resize the buffer.

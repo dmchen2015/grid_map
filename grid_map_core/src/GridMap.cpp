@@ -182,6 +182,17 @@ float& GridMap::atPosition(const std::string& layer, const Position& position)
 
 float GridMap::atPosition(const std::string& layer, const Position& position, InterpolationMethods interpolationMethod) const
 {
+  try {
+    const grid_map::Matrix& layerMat = operator[](layer);
+    return atPosition( layerMat, position, interpolationMethod);
+  } catch (const std::out_of_range& exception) {
+    throw std::out_of_range("GridMap::at(...) : No map layer '" + layer + "' available.");
+  }
+}
+
+
+float GridMap::atPosition(const grid_map::Matrix& layer, const Position& position, InterpolationMethods interpolationMethod) const
+{
   switch (interpolationMethod) {
       case InterpolationMethods::INTER_LINEAR:
       {
@@ -195,7 +206,7 @@ float GridMap::atPosition(const std::string& layer, const Position& position, In
       {
         Index index;
         if (getIndex(position, index)) {
-        return at(layer, index);
+        return layer(index(0), index(1));
         }
         else
         throw std::out_of_range("GridMap::atPosition(...) : Position is out of range.");
@@ -648,7 +659,7 @@ void GridMap::clearCols(unsigned int index, unsigned int nCols)
   }
 }
 
-bool GridMap::atPositionLinearInterpolated(const std::string& layer, const Position& position,
+bool GridMap::atPositionLinearInterpolated(const grid_map::Matrix& layer, const Position& position,
                                            float& value) const
 {
   Position point;
@@ -684,25 +695,16 @@ bool GridMap::atPositionLinearInterpolated(const std::string& layer, const Posit
   const size_t  bufferSize    = mapSize(0) * mapSize(1);
   const size_t  startIndexLin = getLinearIndexFromIndex( startIndex_, mapSize );
   const size_t  endIndexLin   = startIndexLin + bufferSize;
-  const auto&   layerMat      = operator[](layer);
   double        f[4];
 
   for (size_t i = 0; i < 4; ++i) {
     const size_t indexLin = getLinearIndexFromIndex(indices[idxShift[i]], mapSize);
     if ((indexLin < startIndexLin) || (indexLin > endIndexLin)) return false;
-    f[i] = layerMat(indexLin);
+    f[i] = layer(indexLin);
   }
 
   getPosition(indices[idxShift[0]], point);
   const Position positionRed     = ( position - point ) / resolution_;
-//   const Position positionRedFlip = Position(1.,1.) - positionRed;
-//   
-//   
-//   
-//   value = f[0] * positionRedFlip.x() * positionRedFlip.y() + 
-//           f[1] *     positionRed.x() * positionRedFlip.y() +
-// 	     f[2] * positionRedFlip.x() *     positionRed.y() + 
-// 	     f[3] *     positionRed.x() *     positionRed.y();
 	  
   const double a = f[1]-f[0];
   const double b = f[2]-f[0];
