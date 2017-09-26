@@ -23,7 +23,8 @@ Polygon::Polygon()
 Polygon::Polygon(std::vector<Position> vertices)
     : Polygon()
 {
-  vertices_ = vertices;
+    vertices_.resize( vertices.size() );
+    for ( size_t i = 0; i < vertices.size(); ++i ) { vertices_[i] = vertices[i]; }
 }
 
 Polygon::~Polygon() {}
@@ -62,7 +63,7 @@ const Position& Polygon::operator [](const size_t index) const
   return getVertex(index);
 }
 
-const std::vector<Position>& Polygon::getVertices() const
+const std::vector<Position, Eigen::aligned_allocator<Position> >& Polygon::getVertices() const
 {
   return vertices_;
 }
@@ -112,7 +113,7 @@ const double Polygon::getArea() const
 Position Polygon::getCentroid() const
 {
   Position centroid = Position::Zero();
-  std::vector<Position> vertices = getVertices();
+  std::vector<Position, Eigen::aligned_allocator<Position> > vertices = getVertices();
   vertices.push_back(vertices.at(0));
   double area = 0.0;
   for (int i = 0; i < vertices.size() - 1; i++) {
@@ -185,7 +186,7 @@ bool Polygon::thickenLine(const double thickness)
   if (vertices_.size() != 2) return false;
   const Vector connection(vertices_[1] - vertices_[0]);
   const Vector orthogonal = thickness * Vector(connection.y(), -connection.x()).normalized();
-  std::vector<Position> newVertices;
+  std::vector<Position, Eigen::aligned_allocator<Position> > newVertices;
   newVertices.reserve(4);
   newVertices.push_back(vertices_[0] + orthogonal);
   newVertices.push_back(vertices_[0] - orthogonal);
@@ -206,7 +207,7 @@ bool Polygon::offsetInward(const double margin)
     neighbourIndices[i] << (i > 0 ? (i-1)%n : n-1), (i + 1) % n;
   }
 
-  std::vector<Position> copy(vertices_);
+  std::vector<Position, Eigen::aligned_allocator<Position> > copy(vertices_);
   for (unsigned int i = 0; i < neighbourIndices.size(); ++i) {
     Eigen::Vector2d v1 = vertices_[neighbourIndices[i](0)] - vertices_[i];
     Eigen::Vector2d v2 = vertices_[neighbourIndices[i](1)] - vertices_[i];
