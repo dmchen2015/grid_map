@@ -1,7 +1,7 @@
 cmake_minimum_required(VERSION 2.8.3)
 project(grid_map_core)
 
-set(CMAKE_CXX_FLAGS "-std=c++11 ${CMAKE_CXX_FLAGS}")
+set(CMAKE_CXX_FLAGS "-std=c++11 -march=native ${CMAKE_CXX_FLAGS}")
 
 ## Find catkin macros and libraries
 find_package(catkin REQUIRED COMPONENTS)
@@ -66,6 +66,7 @@ add_library(${PROJECT_NAME}
    src/iterators/SpiralIterator.cpp
    src/iterators/PolygonIterator.cpp
    src/iterators/LineIterator.cpp
+   src/iterators/SlidingWindowIterator.cpp
 )
 
 target_link_libraries(${PROJECT_NAME}
@@ -114,7 +115,10 @@ catkin_add_gtest(${PROJECT_NAME}-test
   test/SubmapIteratorTest.cpp
   test/PolygonIteratorTest.cpp
   test/PolygonTest.cpp
-  test/EigenPluginsTest.cpp)
+  test/EigenPluginsTest.cpp
+  test/SpiralIteratorTest.cpp
+  test/SlidingWindowIteratorTest.cpp
+  )
 endif()
 
 if(TARGET ${PROJECT_NAME}-test)

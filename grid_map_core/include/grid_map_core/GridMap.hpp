@@ -375,11 +375,6 @@ class GridMap
   bool extendToInclude(const GridMap& other);
 
   /*!
-   * Rearranges data such that the buffer start index is at (0,0).
-   */
-  void convertToDefaultStartIndex();
-
-  /*!
    * Clears all cells (set to NAN) for a layer.
    * @param layer the layer to be cleared.
    */
@@ -464,6 +459,17 @@ class GridMap
    */
   const Index& getStartIndex() const;
 
+  /*!
+   * Checks if the buffer is at start index (0,0).
+   * @return true if buffer is at default start index.
+   */
+  bool isDefaultStartIndex() const;
+
+  /*!
+   * Rearranges data such that the buffer start index is at (0,0).
+   */
+  void convertToDefaultStartIndex();
+
  private:
 
   /*!
@@ -502,7 +508,11 @@ class GridMap
   Time timestamp_;
 
   //! Grid map data stored as layers of matrices.
-  std::unordered_map<std::string, Matrix> data_;
+  std::unordered_map<std::string, 
+                     Matrix,
+                     std::hash<std::string>,
+		     std::equal_to<std::string>,
+		     Eigen::aligned_allocator< std::pair<const std::string, Matrix> > > data_; 
 
   //! Names of the data layers.
   std::vector<std::string> layers_;

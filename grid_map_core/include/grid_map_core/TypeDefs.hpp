@@ -13,7 +13,7 @@
 
 namespace grid_map {
 
-  typedef Eigen::MatrixXf Matrix;
+  typedef Eigen::MatrixXf  Matrix;
   typedef Matrix::Scalar DataType;
   typedef Eigen::Vector2d Position;
   typedef Eigen::Vector2d Vector;

@@ -1,7 +1,7 @@
 cmake_minimum_required(VERSION 2.8.3)
 project(grid_map_ros)
 
-set(CMAKE_CXX_FLAGS "-std=c++11 ${CMAKE_CXX_FLAGS}")
+set(CMAKE_CXX_FLAGS "-std=c++11 -march=native ${CMAKE_CXX_FLAGS}")
 
 ## Find catkin macros and libraries
 find_package(catkin REQUIRED COMPONENTS
@@ -104,10 +104,9 @@ install(
 if(CATKIN_ENABLE_TESTING)
 set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -pthread")
 ## Add gtest based cpp test target and link libraries
-catkin_add_gtest(
-	${PROJECT_NAME}-test
-	test/test_grid_map_ros.cpp
-	test/GridMapRosTest.cpp
+catkin_add_gtest(${PROJECT_NAME}-test
+  test/test_grid_map_ros.cpp
+  test/GridMapRosTest.cpp
 )
 endif()
 

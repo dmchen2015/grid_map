@@ -15,6 +15,7 @@
 
 // Eigen
 #include <Eigen/Core>
+#include <Eigen/StdVector>
 
 namespace grid_map {
 
@@ -78,7 +79,7 @@ class Polygon
    * Returns the vertices of the polygon.
    * @return the vertices of the polygon.
    */
-  const std::vector<Position>& getVertices() const;
+  const std::vector<Position, Eigen::aligned_allocator<Position> >& getVertices() const;
 
   /*!
    * Returns the number of vertices.
@@ -130,6 +131,13 @@ class Polygon
   Position getCentroid() const;
 
   /*!
+   * Gets the bounding box of the polygon.
+   * @param center the center of the bounding box.
+   * @param length the side lengths of the bounding box.
+   */
+  void getBoundingBox(Position& center, Length& length) const;
+
+  /*!
    * Convert polygon to inequality constraints which most tightly contain the points; i.e.,
    * create constraints to bound the convex hull of polygon. The inequality constraints are
    * represented as A and b, a set of constraints such that A*x <= b defining the region of
@@ -150,6 +158,14 @@ class Polygon
    * @return true if successful, false otherwise.
    */
   bool offsetInward(const double margin);
+
+  /*!
+   * If only two verices are given, this methods generates a
+   * `thickened` line polygon with four vertices.
+   * @param thickness the desired thickness of the line.
+   * @return true if successful, false otherwise.
+   */
+  bool thickenLine(const double thickness);
 
   /*!
    * Return a triangulated version of the polygon.
@@ -213,7 +229,7 @@ class Polygon
   uint64_t timestamp_;
 
   //! Vertices of the polygon.
-  std::vector<Position> vertices_;
+  std::vector<Position, Eigen::aligned_allocator<Position> > vertices_;
 
  public:
   EIGEN_MAKE_ALIGNED_OPERATOR_NEW

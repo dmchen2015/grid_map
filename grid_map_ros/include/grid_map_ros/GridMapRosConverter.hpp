@@ -39,6 +39,7 @@ class GridMapRosConverter
    * Default constructor.
    */
   GridMapRosConverter();
+  EIGEN_MAKE_ALIGNED_OPERATOR_NEW;
 
   /*!
    * Destructor.

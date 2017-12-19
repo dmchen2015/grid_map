@@ -10,12 +10,11 @@
 
 #include "grid_map_core/GridMap.hpp"
 
-// Eigen
 #include <Eigen/Core>
-
-// unique_ptr
 #include <memory>
 #include <vector>
+
+#include <Eigen/StdVector>
 
 namespace grid_map {
 
@@ -103,7 +102,7 @@ private:
   //! Number of rings into the circle is divided.
   unsigned int nRings_;
   unsigned int distance_;
-  std::vector<Index> pointsRing_;
+  std::vector<Index, Eigen::aligned_allocator<Index> > pointsRing_;
 
   //! Map information needed to get position from iterator.
   Length mapLength_;

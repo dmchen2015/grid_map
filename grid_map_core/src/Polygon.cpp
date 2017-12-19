@@ -8,9 +8,10 @@
 
 #include <grid_map_core/Polygon.hpp>
 
-// Eigen
 #include <Eigen/Core>
 #include <Eigen/Geometry>
+
+#include <limits>
 
 namespace grid_map {
 
@@ -22,7 +23,8 @@ Polygon::Polygon()
 Polygon::Polygon(std::vector<Position> vertices)
     : Polygon()
 {
-  vertices_ = vertices;
+    vertices_.resize( vertices.size() );
+    for ( size_t i = 0; i < vertices.size(); ++i ) { vertices_[i] = vertices[i]; }
 }
 
 Polygon::~Polygon() {}
@@ -61,7 +63,7 @@ const Position& Polygon::operator [](const size_t index) const
   return getVertex(index);
 }
 
-const std::vector<Position>& Polygon::getVertices() const
+const std::vector<Position, Eigen::aligned_allocator<Position> >& Polygon::getVertices() const
 {
   return vertices_;
 }
@@ -111,7 +113,7 @@ const double Polygon::getArea() const
 Position Polygon::getCentroid() const
 {
   Position centroid = Position::Zero();
-  std::vector<Position> vertices = getVertices();
+  std::vector<Position, Eigen::aligned_allocator<Position> > vertices = getVertices();
   vertices.push_back(vertices.at(0));
   double area = 0.0;
   for (int i = 0; i < vertices.size() - 1; i++) {
@@ -123,6 +125,24 @@ Position Polygon::getCentroid() const
   area *= 0.5;
   centroid /= (6.0 * area);
   return centroid;
+}
+
+void Polygon::getBoundingBox(Position& center, Length& length) const
+{
+  double minX = std::numeric_limits<double>::infinity();
+  double maxX = -std::numeric_limits<double>::infinity();
+  double minY = std::numeric_limits<double>::infinity();
+  double maxY = -std::numeric_limits<double>::infinity();
+  for (const auto& vertex : vertices_) {
+    if (vertex.x() > maxX) maxX = vertex.x();
+    if (vertex.y() > maxY) maxY = vertex.y();
+    if (vertex.x() < minX) minX = vertex.x();
+    if (vertex.y() < minY) minY = vertex.y();
+  }
+  center.x() = (minX + maxX) / 2.0;
+  center.y() = (minY + maxY) / 2.0;
+  length.x() = (maxX - minX);
+  length.y() = (maxY - minY);
 }
 
 bool Polygon::convertToInequalityConstraints(Eigen::MatrixXd& A, Eigen::VectorXd& b) const
@@ -161,6 +181,21 @@ bool Polygon::convertToInequalityConstraints(Eigen::MatrixXd& A, Eigen::VectorXd
   return true;
 }
 
+bool Polygon::thickenLine(const double thickness)
+{
+  if (vertices_.size() != 2) return false;
+  const Vector connection(vertices_[1] - vertices_[0]);
+  const Vector orthogonal = thickness * Vector(connection.y(), -connection.x()).normalized();
+  std::vector<Position, Eigen::aligned_allocator<Position> > newVertices;
+  newVertices.reserve(4);
+  newVertices.push_back(vertices_[0] + orthogonal);
+  newVertices.push_back(vertices_[0] - orthogonal);
+  newVertices.push_back(vertices_[1] - orthogonal);
+  newVertices.push_back(vertices_[1] + orthogonal);
+  vertices_ = newVertices;
+  return true;
+}
+
 bool Polygon::offsetInward(const double margin)
 {
   // Create a list of indices of the neighbours of each vertex.
@@ -172,7 +207,7 @@ bool Polygon::offsetInward(const double margin)
     neighbourIndices[i] << (i > 0 ? (i-1)%n : n-1), (i + 1) % n;
   }
 
-  std::vector<Position> copy(vertices_);
+  std::vector<Position, Eigen::aligned_allocator<Position> > copy(vertices_);
   for (unsigned int i = 0; i < neighbourIndices.size(); ++i) {
     Eigen::Vector2d v1 = vertices_[neighbourIndices[i](0)] - vertices_[i];
     Eigen::Vector2d v2 = vertices_[neighbourIndices[i](1)] - vertices_[i];
@@ -189,8 +224,11 @@ std::vector<Polygon> Polygon::triangulate(const TriangulationMethods& method) co
 {
   // TODO Add more triangulation methods.
   // https://en.wikipedia.org/wiki/Polygon_triangulation
-  size_t nPolygons = vertices_.size() - 2;
   std::vector<Polygon> polygons;
+  if (vertices_.size() < 3)
+    return polygons;
+
+  size_t nPolygons = vertices_.size() - 2;
   polygons.reserve(nPolygons);
 
   if (nPolygons < 1) {
@@ -226,6 +264,7 @@ Polygon Polygon::convexHullOfTwoCircles(const Position center1,
                                    const Position center2, const double radius,
                                    const int nVertices)
 {
+  if (center1 == center2) return fromCircle(center1, radius, nVertices);
   Eigen::Vector2d centerToVertex, centerToVertexTemp;
   centerToVertex = center2 - center1;
   centerToVertex.normalize();

@@ -1,7 +1,7 @@
 cmake_minimum_required(VERSION 2.8.3)
 project(grid_map_filters)
 
-set(CMAKE_CXX_FLAGS "-std=c++11 ${CMAKE_CXX_FLAGS}")
+set(CMAKE_CXX_FLAGS "-std=c++11 -march=native ${CMAKE_CXX_FLAGS}")
 
 ## Find catkin macros and libraries
 find_package(catkin REQUIRED COMPONENTS
@@ -50,10 +50,17 @@ include_directories(
 
 ## Declare a cpp library
 add_library(${PROJECT_NAME}
-  src/WeightedSumFilter.cpp
-  src/MinFilter.cpp
   src/ThresholdFilter.cpp
+  src/MinInRadiusFilter.cpp
+  src/MeanInRadiusFilter.cpp
+  src/NormalVectorsFilter.cpp
+  src/NormalColorMapFilter.cpp
+  src/MathExpressionFilter.cpp
+  src/SlidingWindowMathExpressionFilter.cpp
+  src/DuplicationFilter.cpp
   src/DeletionFilter.cpp
+  src/SetBasicLayersFilter.cpp
+  src/BufferNormalizerFilter.cpp
 )
 
 target_link_libraries(${PROJECT_NAME}
