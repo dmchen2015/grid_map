@@ -18,6 +18,8 @@ find_package(catkin REQUIRED COMPONENTS
 
 find_package(octomap REQUIRED)
 
+find_package(OpenCV REQUIRED)
+
 ###################################
 ## catkin specific configuration ##
 ###################################
@@ -45,6 +47,7 @@ include_directories(
   ${catkin_INCLUDE_DIRS}
   ${EIGEN3_INCLUDE_DIR}
   ${OCTOMAP_INCLUDE_DIR}
+  ${OpenCV_INCLUDE_DIRS}
 )
 
 ## Declare a cpp executable
@@ -100,47 +103,56 @@ add_executable(
 target_link_libraries(
   simple_demo
   ${catkin_LIBRARIES}
+  ${OpenCV_LIBRARIES}
 )
 
 target_link_libraries(
   tutorial_demo
   ${catkin_LIBRARIES}
+  ${OpenCV_LIBRARIES}
 )
 
 target_link_libraries(
   iterators_demo
   ${catkin_LIBRARIES}
+  ${OpenCV_LIBRARIES}
 )
 
 target_link_libraries(
   image_to_gridmap_demo
   ${catkin_LIBRARIES}
+  ${OpenCV_LIBRARIES}
 )
 
 target_link_libraries(
   octomap_to_gridmap_demo
   ${catkin_LIBRARIES}
   ${OCTOMAP_LIBRARIES}
+  ${OpenCV_LIBRARIES}
 )
 
 target_link_libraries(
   move_demo
   ${catkin_LIBRARIES}
+  ${OpenCV_LIBRARIES}
 )
 
 target_link_libraries(
   iterator_benchmark
   ${catkin_LIBRARIES}
+  ${OpenCV_LIBRARIES}
 )
 
 target_link_libraries(
   opencv_demo
   ${catkin_LIBRARIES}
+  ${OpenCV_LIBRARIES}
 )
 
 target_link_libraries(
   resolution_change_demo
   ${catkin_LIBRARIES}
+  ${OpenCV_LIBRARIES}
 )
 
 #############
