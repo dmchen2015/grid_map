@@ -54,11 +54,16 @@ add_library(${PROJECT_NAME}
   src/MinInRadiusFilter.cpp
   src/MeanInRadiusFilter.cpp
   src/NormalVectorsFilter.cpp
+  src/CurvatureFilter.cpp
   src/NormalColorMapFilter.cpp
+  src/LightIntensityFilter.cpp
   src/MathExpressionFilter.cpp
   src/SlidingWindowMathExpressionFilter.cpp
   src/DuplicationFilter.cpp
   src/DeletionFilter.cpp
+  src/ColorFillFilter.cpp
+  src/ColorMapFilter.cpp
+  src/ColorBlendingFilter.cpp
   src/SetBasicLayersFilter.cpp
   src/BufferNormalizerFilter.cpp
 )

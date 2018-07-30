@@ -22,6 +22,12 @@ find_package(catkin REQUIRED COMPONENTS
   filters
 )
 
+find_package(OpenCV REQUIRED
+  COMPONENTS
+  opencv_highgui
+  CONFIG
+)
+
 find_package(octomap REQUIRED)
 
 find_package(OpenCV REQUIRED)
